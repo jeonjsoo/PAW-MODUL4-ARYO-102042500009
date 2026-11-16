@@ -16,7 +16,7 @@
         <div class="card shadow-sm">
             <div class="card-body p-4">
                 {{-- TODO 8: Tambahkan atribut enctype="multipart/form-data" pada form di bawah ini --}}
-                <form action="{{ route('buku.update', $buku->id) }}" method="POST">
+                <form action="{{ route('buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -65,6 +65,26 @@
                     </div>
 
                     {{-- TODO 8: Tampilkan gambar sampul saat ini ($buku->cover) dan sediakan input file untuk mengganti sampul --}}
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Sampul Buku Saat Ini</label>
+                        @if($buku->cover)
+                            <div class="mb-3">
+                                <img src="{{ asset('storage/' . $buku->cover) }}"
+                                     alt="Sampul {{ $buku->judul }}"
+                                     class="img-thumbnail" style="max-height: 220px;">
+                            </div>
+                        @else
+                            <p class="text-muted small">Belum ada sampul buku.</p>
+                        @endif
+
+                        <label for="cover" class="form-label">Ganti Sampul (Opsional)</label>
+                        <input type="file" class="form-control @error('cover') is-invalid @enderror"
+                               id="cover" name="cover" accept=".jpg,.jpeg,.png,image/jpeg,image/png">
+                        @error('cover')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="text-muted d-block mt-1">Format JPG, JPEG, atau PNG. Maksimal 2 MB.</small>
+                    </div>
 
                     <div class="d-flex justify-content-end gap-2">
                         <a href="{{ route('buku.index') }}" class="btn btn-light border px-4">Batal</a>
